@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Eventa — Gestão de Eventos</title>
+  <style>
+    :root {
+      box-sizing: border-box;
+      padding-top: env(safe-area-inset-top,0px);
+      padding-bottom: env(safe-area-inset-bottom,0px);
+      --bg: #f6f7fb;
+      --sf: #fff;
+      --tx: #161a2b;
+      --mu: #6b7186;
+      --bd: #e6e8f0;
+      --pr: #4f46e5;
+      --pr2: #eef0ff;
+      --ok: #15803d;
+      --okb: #e3f6ea;
+      --wa: #b45309;
+      --wab: #fdf0d9;
+      --er: #b91c1c;
+      --erb: #fde7e7;
+      --in: #1d4ed8;
+      --inb: #e4edff;
+    }
+    @media(prefers-color-scheme:dark) {
+      :root:not([data-theme="light"]) {
+        --bg: #0f1220;
+        --sf: #171b2e;
+        --tx: #eef0f8;
+        --mu: #9aa1ba;
+        --bd: #262b45;
+        --pr: #818cf8;
+        --pr2: #232852;
+        --ok: #4ade80;
+        --okb: #14301f;
+        --wa: #fbbf24;
+        --wab: #3a2c10;
+        --er: #f87171;
+        --erb: #3a1818;
+        --in: #7aa2ff;
+        --inb: #1a2748;
+      }
+    }
+    :root[data-theme="dark"] {
+      --bg: #0f1220;
+      --sf: #171b2e;
+      --tx: #eef0f8;
+      --mu: #9aa1ba;
+      --bd: #262b45;
+      --pr: #818cf8;
+      --pr2: #232852;
+      --ok: #4ade80;
+      --okb: #14301f;
+      --wa: #fbbf24;
+      --wab: #3a2c10;
+      --er: #f87171;
+      --erb: #3a1818;
+      --in: #7aa2ff;
+      --inb: #1a2748;
+    }
+    * {
+      box-sizing: border-box;
+    }
+    html,body {
+      height: 100%;
+    }
+    html {
+      scroll-padding-top: env(safe-area-inset-top,0px);
+    }
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--tx);
+      font: 15px/1.5 Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+    }
+    button,input,select,textarea {
+      font: inherit;
+      color: inherit;
+    }
+    :focus-visible {
+      outline: 2px solid var(--pr);
+      outline-offset: 2px;
+    }
+    .app {
+      display: flex;
+      min-height: 100%;
+    }
+    aside {
+      width: 236px;
+      background: var(--sf);
+      border-right: 1px solid var(--bd);
+      padding: 20px 14px;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+    .logo {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      font-weight: 700;
+      font-size: 18px;
+      padding: 4px 10px 18px;
+    }
+    .logo i {
+      width: 30px;
+      height: 30px;
+      border-radius: 9px;
+      background: var(--pr);
+      display: grid;
+      place-items: center;
+      color: #fff;
+      font-style: normal;
+    }
+    .nav {
+      display: flex;
+      gap: 10px;
+      align-items: center;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 0;
+      background: none;
+      color: var(--mu);
+      cursor: pointer;
+      text-align: left;
+      font-weight: 500;
+      width: 100%;
+    }
+    .nav:hover {
+      background: var(--bg);
+      color: var(--tx);
+    }
+    .nav[aria-current=page] {
+      background: var(--pr2);
+      color: var(--pr);
+    }
+    main {
+      flex: 1;
+      min-width: 0;
+      padding: 28px clamp(16px,3vw,40px) 40px;
+      max-width: 1280px;
+      margin: 0 auto;
+      width: 100%;
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 22px;
+    }
+    h1 {
+      font-size: 24px;
+      margin: 0;
+      letter-spacing: -.02em;
+    }
+    .sub {
+      color: var(--mu);
+      margin: 2px 0 0;
+    }
+    .btn {
+      border: 1px solid var(--bd);
+      background: var(--sf);
+      border-radius: 10px;
+      padding: 9px 16px;
+      cursor: pointer;
+      font-weight: 600;
+      min-height: 40px;
+    }
+    .btn:hover {
+      border-color: var(--pr);
+    }
+    .btn.p {
+      background: var(--pr);
+      border-color: var(--pr);
+      color: #fff;
+    }
+    .btn.p:hover {
+      opacity: .9;
+    }
+    .btn.d {
+      color: var(--er);
+    }
+    .btn:disabled {
+      opacity: .5;
+      cursor: not-allowed;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+    }
+    .k {
+      grid-template-columns: repeat(auto-fit,minmax(190px,1fr));
+    }
+    .two {
+      grid-template-columns: repeat(auto-fit,minmax(320px,1fr));
+    }
+    .card {
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: 14px;
+      padding: 18px;
+    }
+    .kpi small {
+      color: var(--mu);
+      display: block;
+    }
+    .kpi b {
+      font-size: 26px;
+      letter-spacing: -.02em;
+    }
+    .card h2 {
+      font-size: 15px;
+      margin: 0 0 14px;
+    }
+    .badge {
+      display: inline-block;
+      padding: 2px 10px;
+      border-radius: 99px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+    .b-Planejamento {
+      background: var(--inb);
+      color: var(--in);
+    }
+    .b-Confirmado {
+      background: var(--okb);
+      color: var(--ok);
+    }
+    .b-Em\ andamento {
+      background: var(--wab);
+      color: var(--wa);
+    }
+    .b-Concluído {
+      background: var(--pr2);
+      color: var(--pr);
+    }
+    .b-Cancelado {
+      background: var(--erb);
+      color: var(--er);
+    }
+    .b-Aprovado {
+      background: var(--okb);
+      color: var(--ok);
+    }
+    .b-Enviado {
+      background: var(--inb);
+      color: var(--in);
+    }
+    .b-Rascunho {
+      background: var(--bg);
+      color: var(--mu);
+    }
+    .b-Aguardando {
+      background: var(--wab);
+      color: var(--wa);
+    }
+    .b-Recusado {
+      background: var(--erb);
+      color: var(--er);
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+    th {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: .04em;
+      color: var(--mu);
+      text-align: left;
+      padding: 8px 10px;
+      border-bottom: 1px solid var(--bd);
+    }
+    td {
+      padding: 12px 10px;
+      border-bottom: 1px solid var(--bd);
+    }
+    tr:last-child td {
+      border: 0;
+    }
+    .tw {
+      overflow-x: auto;
+    }
+    .bar {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+    input,select,textarea {
+      background: var(--sf);
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      padding: 9px 12px;
+      min-height: 40px;
+      width: 100%;
+    }
+    .bar input {
+      flex: 1;
+      min-width: 180px;
+    }
+    .bar select {
+      width: auto;
+    }
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      margin-bottom: 4px;
+    }
+    .f {
+      margin-bottom: 12px;
+    }
+    .seg {
+      display: inline-flex;
+      border: 1px solid var(--bd);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .seg button {
+      border: 0;
+      background: var(--sf);
+      padding: 9px 14px;
+      cursor: pointer;
+      min-height: 40px;
+    }
+    .seg button[aria-pressed=true] {
+      background: var(--pr2);
+      color: var(--pr);
+      font-weight: 600;
+    }
+    .ev {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+      padding: 12px 0;
+      border-bottom: 1px solid var(--bd);
+    }
+    .ev:last-child {
+      border: 0;
+    }
+    .date {
+      width: 48px;
+      text-align: center;
+      background: var(--pr2);
+      color: var(--pr);
+      border-radius: 10px;
+      padding: 6px 0;
+      font-weight: 700;
+      line-height: 1.1;
+      flex: none;
+    }
+    .date small {
+      display: block;
+      font-size: 11px;
+      text-transform: uppercase;
+    }
+    .ev div.i {
+      flex: 1;
+      min-width: 0;
+    }
+    .mu {
+      color: var(--mu);
+      font-size: 13px;
+    }
+    .empty {
+      text-align: center;
+      color: var(--mu);
+      padding: 36px 10px;
+    }
+    dialog {
+      border: 0;
+      border-radius: 16px;
+      padding: 22px;
+      width: min(560px,94vw);
+      background: var(--sf);
+      color: var(--tx);
+      box-shadow: 0 20px 60px #0004;
+    }
+    dialog::backdrop {
+      background: #0008;
+    }
+    .row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .toast {
+      position: fixed;
+      left: 50%;
+      bottom: calc(84px + env(safe-area-inset-bottom,0px));
+      transform: translateX(-50%);
+      background: var(--tx);
+      color: var(--bg);
+      padding: 10px 18px;
+      border-radius: 12px;
+      z-index: 9;
+      font-weight: 600;
+    }
+    .tot {
+      display: flex;
+      justify-content: space-between;
+      padding: 4px 0;
+    }
+    .tot.big {
+      font-size: 20px;
+      font-weight: 700;
+      border-top: 1px solid var(--bd);
+      margin-top: 6px;
+      padding-top: 10px;
+    }
+    .sk {
+      height: 90px;
+      border-radius: 14px;
+      background: linear-gradient(90deg,var(--bd),var(--sf),var(--bd));
+      background-size: 200% 100%;
+      animation: s 1.2s infinite;
+    }
+    @keyframes s {
+      to {
+        background-position: -200% 0;
+      }
+    }
+    nav.bot {
+      display: none;
+    }
+    @media(max-width:860px) {
+      aside {
+        display: none;
+      }
+      main {
+        padding-bottom: 96px;
+      }
+      nav.bot {
+        display: flex;
+        position: fixed;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: var(--sf);
+        border-top: 1px solid var(--bd);
+        padding: 6px 4px calc(6px + env(safe-area-inset-bottom,0px));
+        z-index: 5;
+      }
+      nav.bot button {
+        flex: 1;
+        border: 0;
+        background: none;
+        color: var(--mu);
+        font-size: 11px;
+        padding: 6px 0;
+        min-height: 48px;
+        cursor: pointer;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2px;
+      }
+      nav.bot button[aria-current=page] {
+        color: var(--pr);
+        font-weight: 700;
+      }
+      .row {
+        grid-template-columns: 1fr;
+      }
+      th.h,td.h {
+        display: none;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <aside aria-label="Menu principal">
+      <div class="logo"><i>E</i><span id="co"></span></div>
+      <div id="side" style="display:flex;flex-direction:column;gap:4px"></div>
+      <div style="margin-top:auto">
+        <button class="nav" id="theme">◐ Alternar tema</button>
+      </div>
+    </aside>
+    <main id="main" tabindex="-1"></main>
+  </div>
+  <nav class="bot" id="bot" aria-label="Navegação"></nav>
+  <dialog id="dlg"></dialog>
+  <div id="toast" class="toast" role="status" hidden></div>
+
+  <script>
+    const CFG = { empresa: "Sua Empresa" }; // personalizável
+    const brl = v => v.toLocaleString("pt-BR", { style: "currency", currency: "BRL" });
+    const esc = s => String(s).replace(/[&<>"]/g, c => ({
+        "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"
+    }[c]));
+    const d0 = new Date();
+    const iso = n => {
+        const d = new Date(d0);
+        d.setDate(d.getDate() + n);
+        return d.toISOString().slice(0, 10);
+    };
+    const ST = ["Planejamento", "Confirmado", "Em andamento", "Concluído", "Cancelado"], TP = ["Casamento", "Aniversário", "Formatura", "Corporativo", "Workshop", "Show", "Outro"];
+    let clients = [
+        {
+            id: 1, nome: "Marina Duarte", doc: "123.456.789-00", tel: "(11) 98888-1020", email: "marina@email.com"
+        },
+        {
+            id: 2, nome: "Grupo Alvorada", doc: "12.345.678/0001-90", tel: "(21) 3000-4400", email: "contato@alvorada.com"
+        },
+        {
+            id: 3, nome: "Rafael Nogueira", doc: "987.654.321-00", tel: "(31) 97777-3030", email: "rafael@email.com"
+        }
+    ];
+    let events = [
+        {
+            id: 1, nome: "Casamento Marina & Lucas", tipo: "Casamento", cli: 1, data: iso(0), hora: "17:00", local: "Espaço Jardim", conv: 180, st: "Em andamento", val: 48500, pago: 30000
+        },
+        {
+            id: 2, nome: "Convenção Anual Alvorada", tipo: "Corporativo", cli: 2, data: iso(6), hora: "09:00", local: "Centro de Convenções", conv: 400, st: "Confirmado", val: 92000, pago: 46000
+        },
+        {
+            id: 3, nome: "Formatura Direito 2026", tipo: "Formatura", cli: 3, data: iso(18), hora: "20:00", local: "Clube Central", conv: 250, st: "Planejamento", val: 61000, pago: 12000
+        },
+        {
+            id: 4, nome: "Workshop de Liderança", tipo: "Workshop", cli: 2, data: iso(-12), hora: "14:00", local: "Hub Inovação", conv: 60, st: "Concluído", val: 15800, pago: 15800
+        },
+        {
+            id: 5, nome: "Aniversário de 15 anos", tipo: "Aniversário", cli: 1, data: iso(32), hora: "19:00", local: "Salão Aurora", conv: 120, st: "Planejamento", val: 27400, pago: 5000
+        }
+    ];
+    let budgets = [
+        {
+            id: 1, cli: 2, ev: 2, total: 92000, st: "Aprovado"
+        },
+        {
+            id: 2, cli: 3, ev: 3, total: 61000, st: "Aguardando"
+        },
+        {
+            id: 3, cli: 1, ev: 5, total: 27400, st: "Enviado"
+        }
+    ];
+    const SV = [
+        { n: "Buffet (por pessoa)", p: 140 }, { n: "Decoração", p: 6500 }, { n: "Som e iluminação", p: 4200 }, { n: "Cerimonial", p: 3000 }, { n: "Fotografia e vídeo", p: 5200 }
+    ];
+    const rec = [18, 24, 21, 32, 29, 41, 38], desp = [11, 15, 13, 19, 17, 24, 22], mes = ["Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out"];
+    const S = {
+        v: "painel", ev: "lista", q: "", st: "", tp: ""
+    };
+    const cn = id => (clients.find(c => c.id == id) || {}).nome || "—";
+    const fd = s => {
+        const [y, m, d] = s.split("-");
+        return `${d}/${m}/${y}`;
+    };
+    const bd = t => `<span class="badge b-${t.split(" ")[0] === "Em" ? "Em andamento" : t.split(" ")[0]}">${t}</span>`;
+    const NAV = [["painel", "▦", "Painel"], ["eventos", "◷", "Eventos"], ["clientes", "☺", "Clientes"], ["orcamentos", "✎", "Orçamentos"], ["financeiro", "$", "Financeiro"]];
+    function toast(m) {
+        const t = document.getElementById("toast");
+        t.textContent = m;
+        t.hidden = false;
+        clearTimeout(t._h);
+        t._h = setTimeout(() => t.hidden = true, 2400);
+    }
+    function nav() {
+        document.getElementById("co").textContent = CFG.empresa;
+        const h = NAV.map(([k, i, l]) => `<button class="nav" data-k="${k}" ${S.v == k ? 'aria-current="page"' : ""}>${i} ${l}</button>`).join("");
+        side.innerHTML = h;
+        bot.innerHTML = NAV.map(([k, i, l]) => `<button data-k="${k}" ${S.v == k ? 'aria-current="page"' : ""}><span aria-hidden="true">${i}</span>${l}</button>`).join("");
+    }
+    document.addEventListener("click", e => {
+        const b = e.target.closest("[data-k]");
+        if (b) {
+            S.v = b.dataset.k;
+            render();
+        }
+    });
+    theme.onclick = () => {
+        const r = document.documentElement, dk = getComputedStyle(r).getPropertyValue("--bg").trim() == "#0f1220";
+        r.dataset.theme = dk ? "light" : "dark";
+    };
+    function head(t, s, btn) {
+        return `<div class="top"><div><h1>${t}</h1><p class="sub">${s}</p></div>${btn || ""}</div>`;
+    }
+    function bars(a, b, lab) {
+        const W = 420, H = 170, m = Math.max(...a) * 1.1, w = W / a.length;
+        return `<svg viewBox="0 0 ${W} ${H + 22}" width="100%" role="img" aria-label="Receitas e despesas por mês">${a.map((v, i) => `<rect x="${i * w + 6}" y="${H - v / m * H}" width="${w / 2 - 8}" height="${v / m * H}" rx="4" fill="var(--pr)"/><rect x="${i * w + w / 2 - 2}" y="${H - b[i] / m * H}" width="${w / 2 - 8}" height="${b[i] / m * H}" rx="4" fill="var(--mu)" opacity=".45"/><text x="${i * w + w / 2}" y="${H + 16}" text-anchor="middle" font-size="11" fill="var(--mu)">${lab[i]}</text>`).join("")}</svg><div class="mu"><span style="color:var(--pr)">■</span> Receitas &nbsp;<span>■</span> Despesas (R$ mil)</div>`;
+    }
+    function donut() {
+        const c = {};
+        events.forEach(e => c[e.tipo] = (c[e.tipo] || 0) + 1);
+        const cols = ["var(--pr)", "#0ea5e9", "#10b981", "#f59e0b", "#ef4444", "#8b5cf6"];
+        let o = 0, tot = events.length, R = 15.9;
+        const arcs = Object.entries(c).map(([k, v], i) => {
+            const p = v / tot * 100, s = `<circle r="${R}" cx="21" cy="21" fill="none" stroke="${cols[i]}" stroke-width="6" stroke-dasharray="${p} ${100 - p}" stroke-dashoffset="${-o}"/>`;
+            o += p;
+            return s;
+        }).join("");
+        return `<div style="display:flex;gap:20px;align-items:center;flex-wrap:wrap"><svg viewBox="0 0 42 42" width="140" role="img" aria-label="Tipos de evento" style="transform:rotate(-90deg)">${arcs}</svg><div>${Object.entries(c).map(([k, v], i) => `<div><span style="color:${cols[i]}">●</span> ${k} <b>${v}</b></div>`).join("")}</div></div>`;
+    }
+    function painel() {
+        const hj = iso(0), rc = events.reduce((s, e) => s + e.pago, 0), tot = events.reduce((s, e) => s + e.val, 0), dp = 62000;
+        const k = [["Eventos hoje", events.filter(e => e.data == hj).length], ["Próximos eventos", events.filter(e => e.data > hj && e.st != "Cancelado").length], ["Em andamento", events.filter(e => e.st == "Em andamento").length], ["Orçamentos pendentes", budgets.filter(b => ["Enviado", "Aguardando"].includes(b.st)).length], ["A receber", brl(tot - rc)], ["Recebido", brl(rc)], ["Despesas", brl(dp)], ["Saldo", brl(rc - dp)]];
+        const prox = [...events].filter(e => e.data >= hj && e.st != "Cancelado").sort((a, b) => a.data.localeCompare(b.data));
+        return head("Olá, bem-vindo(a) 👋", "Visão geral de " + esc(CFG.empresa), `<button class="btn p" onclick="evForm()">+ Novo evento</button>`) +
+            `<div class="grid k">${k.map(([l, v]) => `<div class="card kpi"><small>${l}</small><b>${v}</b></div>`).join("")}</div>
+    <div class="grid two" style="margin-top:16px"><div class="card"><h2>Receita x despesas</h2>${bars(rec, desp, mes)}</div><div class="card"><h2>Tipos de evento</h2>${donut()}</div></div>
+    <div class="card" style="margin-top:16px"><h2>Próximos eventos</h2>${prox.map(evRow).join("") || '<div class="empty">Nenhum evento agendado.</div>'}</div>`;
+    }
+    function evRow(e) {
+        const [, m, d] = e.data.split("-");
+        return `<div class="ev"><div class="date">${d}<small>${["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"][m - 1]}</small></div><div class="i"><b>${esc(e.nome)}</b><div class="mu">${esc(cn(e.cli))} · ${e.hora} · ${esc(e.local)}</div></div><div style="text-align:right">${bd(e.st)}<div class="mu">${brl(e.val)}</div></div></div>`;
+    }
+    function eventos() {
+        const L = events.filter(e => (!S.q || (e.nome + cn(e.cli)).toLowerCase().includes(S.q.toLowerCase())) && (!S.st || e.st == S.st) && (!S.tp || e.tipo == S.tp)).sort((a, b) => a.data.localeCompare(b.data));
+        const opt = (a, v) => `<option value="">Todos</option>` + a.map(x => `<option ${v == x ? "selected" : ""}>${x}</option>`).join("");
+        let body = !L.length ? `<div class="card empty"><b>Nenhum evento encontrado</b><p>Ajuste os filtros ou crie um novo evento.</p></div>` : S.ev == "cards" ? `<div class="grid two">${L.map(e => `<div class="card"><div style="display:flex;justify-content:space-between">${bd(e.st)}<span class="mu">${e.tipo}</span></div><h2 style="margin:10px 0 4px;font-size:17px">${esc(e.nome)}</h2><div class="mu">${fd(e.data)} · ${e.hora}<br>${esc(e.local)} · ${e.conv} convidados<br>${esc(cn(e.cli))}</div><div style="display:flex;justify-content:space-between;margin-top:14px;align-items:center"><b>${brl(e.val)}</b><span>${acts(e)}</span></div></div>`).join("")}</div>` :
+            `<div class="card tw"><table><thead><tr><th>Evento</th><th class="h">Cliente</th><th>Data</th><th>Status</th><th class="h">Valor</th><th></th></tr></thead><tbody>${L.map(e => `<tr><td><b>${esc(e.nome)}</b><div class="mu">${e.tipo}</div></td><td class="h">${esc(cn(e.cli))}</td><td>${fd(e.data)}<div class="mu">${e.hora}</div></td><td>${bd(e.st)}</td><td class="h">${brl(e.val)}</td><td style="white-space:nowrap">${acts(e)}</td></tr>`).join("")}</tbody></table></div>`;
+        return head("Eventos", "Gerencie todos os seus eventos em um só lugar", `<button class="btn p" onclick="evForm()">+ Novo evento</button>`) +
+            `<div class="bar"><input type="search" id="q" placeholder="Pesquisar evento ou cliente…" aria-label="Pesquisar" value="${esc(S.q)}"><select id="fs" aria-label="Status">${opt(ST, S.st)}</select><select id="ft" aria-label="Tipo">${opt(TP, S.tp)}</select><div class="seg"><button aria-pressed="${S.ev == "lista"}" onclick="S.ev='lista';render()">Lista</button><button aria-pressed="${S.ev == "cards"}" onclick="S.ev='cards';render()">Cards</button></div></div>` + body;
+    }
+    const acts = e => `<button class="btn" aria-label="Editar" onclick="evForm(${e.id})">✎</button> <button class="btn" aria-label="Duplicar" onclick="dup(${e.id})">⧉</button> <button class="btn d" aria-label="Excluir" onclick="del(${e.id})">🗑</button>`;
+    function dup(id) {
+        const e = events.find(x => x.id == id);
+        events.push({
+            ...e, id: Date.now(), nome: e.nome + " (cópia)", st: "Planejamento", pago: 0
+        });
+        toast("Evento duplicado");
+        render();
+    }
+    function del(id) {
+        dlg.innerHTML = `<h2 style="margin-top:0">Excluir evento?</h2><p class="mu">Esta ação não pode ser desfeita.</p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="dlg.close()">Cancelar</button><button class="btn p" style="background:var(--er);border-color:var(--er)" onclick="events=events.filter(x=>x.id!=${id});dlg.close();toast('Evento excluído');render()">Excluir</button></div>`;
+        dlg.showModal();
+    }
+    function evForm(id) {
+        const e = events.find(x => x.id == id) || {
+            nome: "", tipo: "Casamento", cli: clients[0].id, data: iso(7), hora: "18:00", local: "", conv: 100, st: "Planejamento", val: 0, pago: 0
+        };
+        const sel = (n, a, v) => `<select id="${n}">${a.map(x => `<option ${x == v ? "selected" : ""}>${x}</option>`).join("")}</select>`;
+        dlg.innerHTML = `<h2 style="margin-top:0">${id ? "Editar" : "Novo"} evento</h2><div class="f"><label for="n">Nome</label><input id="n" value="${esc(e.nome)}"></div>
+    <div class="row"><div class="f"><label>Tipo</label>${sel("t", TP, e.tipo)}</div><div class="f"><label for="c">Cliente</label><select id="c">${clients.map(c => `<option value="${c.id}" ${c.id == e.cli ? "selected" : ""}>${esc(c.nome)}</option>`).join("")}</select></div>
+    <div class="f"><label for="d">Data</label><input type="date" id="d" value="${e.data}"></div><div class="f"><label for="h">Horário</label><input type="time" id="h" value="${e.hora}"></div>
+    <div class="f"><label for="l">Local</label><input id="l" value="${esc(e.local)}"></div><div class="f"><label for="g">Convidados</label><input type="number" id="g" value="${e.conv}"></div>
+    <div class="f"><label>Status</label>${sel("s", ST, e.st)}</div><div class="f"><label for="v">Valor (R$)</label><input type="number" id="v" value="${e.val}"></div></div>
+    <p id="er" class="mu" style="color:var(--er)" role="alert"></p><div style="display:flex;gap:8px;justify-content:flex-end"><button class="btn" onclick="dlg.close()">Cancelar</button><button class="btn p" id="sv">Salvar</button></div>`;
+        dlg.showModal();
+        sv.onclick = () => {
+            if (!n.value.trim()) {
+                er.textContent = "Informe o nome do evento.";
+                n.focus();
+                return;
+            }
+            const o = {
+                ...e, nome: n.value.trim(), tipo: t.value, cli: +c.value, data: d.value, hora: h.value, local: l.value, conv: +g.value, st: s.value, val: +v.value
+            };
+            if (id)
+                events = events.map(x => x.id == id ? o : x);
+            else
+                events.push({ ...o, id: Date.now() });
+            dlg.close();
+            toast("Evento salvo");
+            render();
+        };
+    }
+    function clientes() {
+        return head("Clientes", "Histórico de eventos e valores por cliente") + `<div class="grid two">${clients.map(c => {
+            const ev = events.filter(e => e.cli == c.id), t = ev.reduce((s, e) => s + e.val, 0), p = ev.reduce((s, e) => s + e.pago, 0);
+            return `<div class="card"><h2 style="font-size:17px;margin-bottom:2px">${esc(c.nome)}</h2><div class="mu">${c.doc}<br>${c.tel} · ${esc(c.email)}</div><div class="grid" style="grid-template-columns:repeat(3,1fr);margin-top:14px"><div><div class="mu">Eventos</div><b>${ev.length}</b></div><div><div class="mu">Contratado</div><b>${brl(t)}</b></div><div><div class="mu">Pendente</div><b style="color:var(--wa)">${brl(t - p)}</b></div></div></div>`;
+        }).join("")}</div>`;
+    }
+    function orcamentos() {
+        return head("Orçamentos", "Crie propostas e acompanhe aprovações", `<button class="btn p" onclick="bForm()">+ Novo orçamento</button>`) +
+            `<div class="card tw"><table><thead><tr><th>Cliente</th><th class="h">Evento</th><th>Valor</th><th>Status</th></tr></thead><tbody>${budgets.map(b => `<tr><td>${esc(cn(b.cli))}</td><td class="h">${esc((events.find(e => e.id == b.ev) || {}).nome || "—")}</td><td>${brl(b.total)}</td><td>${bd(b.st == "Aguardando" ? "Aguardando aprovação" : b.st)}</td></tr>`).join("")}</tbody></table></div>`;
+    }
+    function bForm() {
+        const q = SV.map(() => 0);
+        dlg.innerHTML = `<h2 style="margin-top:0">Novo orçamento</h2><div class="row"><div class="f"><label for="bc">Cliente</label><select id="bc">${clients.map(c => `<option value="${c.id}">${esc(c.nome)}</option>`).join("")}</select></div><div class="f"><label for="be">Evento</label><select id="be">${events.map(e => `<option value="${e.id}">${esc(e.nome)}</option>`).join("")}</select></div></div>
+    ${SV.map((s, i) => `<div style="display:flex;gap:10px;align-items:center;margin-bottom:8px"><span style="flex:1">${s.n}<div class="mu">${brl(s.p)}</div></span><input type="number" min="0" value="0" id="q${i}" aria-label="Quantidade de ${s.n}" style="width:80px"></div>`).join("")}
+    <div class="f"><label for="bdc">Desconto (%)</label><input type="number" id="bdc" min="0" max="100" value="0"></div>
+    <div id="tt"></div><div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px"><button class="btn" onclick="dlg.close()">Cancelar</button><button class="btn p" id="bs">Salvar rascunho</button></div>`;
+        let tot = 0;
+        const calc = () => {
+            const sub = SV.reduce((s, x, i) => s + x.p * (+document.getElementById("q" + i).value || 0), 0), dc = sub * Math.min(100, +bdc.value || 0) / 100;
+            tot = sub - dc;
+            tt.innerHTML = `<div class="tot"><span>Subtotal</span>${brl(sub)}</div><div class="tot"><span>Desconto</span>− ${brl(dc)}</div><div class="tot big"><span>Total</span>${brl(tot)}</div>`;
+        };
+        dlg.querySelectorAll("input").forEach(i => i.oninput = calc);
+        calc();
+        dlg.showModal();
+        bs.onclick = () => {
+            if (!tot) {
+                toast("Adicione ao menos um serviço");
+                return;
+            }
+            budgets.push({
+                id: Date.now(), cli: +bc.value, ev: +be.value, total: tot, st: "Rascunho"
+            });
+            dlg.close();
+            toast("Orçamento criado");
+            render();
+        };
+    }
+    function financeiro() {
+        const rc = events.reduce((s, e) => s + e.pago, 0), tot = events.reduce((s, e) => s + e.val, 0), dp = 62000;
+        return head("Financeiro", "Receitas, despesas e fluxo de caixa") + `<div class="grid k"><div class="card kpi"><small>Receitas</small><b style="color:var(--ok)">${brl(rc)}</b></div><div class="card kpi"><small>Despesas</small><b style="color:var(--er)">${brl(dp)}</b></div><div class="card kpi"><small>Lucro</small><b>${brl(rc - dp)}</b></div><div class="card kpi"><small>Pendente</small><b style="color:var(--wa)">${brl(tot - rc)}</b></div></div>
+    <div class="card" style="margin-top:16px"><h2>Fluxo de caixa</h2>${bars(rec, desp, mes)}</div>
+    <div class="card tw" style="margin-top:16px"><h2>Recebimentos por evento</h2><table><thead><tr><th>Evento</th><th>Recebido</th><th class="h">Total</th><th>Pendente</th></tr></thead><tbody>${events.map(e => `<tr><td>${esc(e.nome)}</td><td>${brl(e.pago)}</td><td class="h">${brl(e.val)}</td><td>${brl(e.val - e.pago)}</td></tr>`).join("")}</tbody></table></div>`;
+    }
+    function render() {
+        nav();
+        const V = {
+            painel, eventos, clientes, orcamentos, financeiro
+        }[S.v];
+        main.innerHTML = V();
+        if (S.v == "eventos") {
+            q.oninput = () => {
+                S.q = q.value;
+                const p = q.selectionStart;
+                render();
+                q.focus();
+                q.setSelectionRange(p, p);
+            };
+            fs.onchange = () => {
+                S.st = fs.value;
+                render();
+            };
+            ft.onchange = () => {
+                S.tp = ft.value;
+                render();
+            };
+        }
+    }
+    main.innerHTML = '<div class="grid k"><div class="sk"></div><div class="sk"></div><div class="sk"></div></div>';
+    setTimeout(render, 350);
+    nav();
+  </script>
+</body>
+</html>
