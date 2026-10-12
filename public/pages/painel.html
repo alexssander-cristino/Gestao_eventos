@@ -1,0 +1,129 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#6759e8">
+    <title>Painel | NexVent</title>
+    <link rel="stylesheet" href="/css/base.css">
+    <link rel="stylesheet" href="/css/layout.css">
+    <link rel="stylesheet" href="/css/components.css">
+</head>
+<body data-page="painel">
+    <div id="page-content">
+        <section class="page-heading">
+            <div>
+                <h1>Visão geral</h1>
+                <p class="page-description">
+                    Acompanhe os principais números da sua empresa.
+                </p>
+            </div>
+
+            <a href="/eventos" class="btn btn-primary">
+                + Novo evento
+            </a>
+        </section>
+
+        <section class="stats-grid">
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Eventos ativos</span>
+                    <span class="stat-icon">▦</span>
+                </div>
+                <div class="stat-value" id="total-eventos">—</div>
+                <div class="stat-foot">Eventos em andamento ou planejados</div>
+            </article>
+
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Receita prevista</span>
+                    <span class="stat-icon">R$</span>
+                </div>
+                <div class="stat-value" id="receita-prevista">R$ 0,00</div>
+                <div class="stat-foot">Valor total dos eventos</div>
+            </article>
+
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Total recebido</span>
+                    <span class="stat-icon">↗</span>
+                </div>
+                <div class="stat-value" id="total-recebido">R$ 0,00</div>
+                <div class="stat-foot positive">Pagamentos registrados</div>
+            </article>
+
+            <article class="card stat-card">
+                <div class="stat-top">
+                    <span class="stat-label">Despesas</span>
+                    <span class="stat-icon">↘</span>
+                </div>
+                <div class="stat-value" id="total-despesas">R$ 0,00</div>
+                <div class="stat-foot">Despesas registradas</div>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="card">
+                <div class="section-heading">
+                    <div>
+                        <h2>Próximos eventos</h2>
+                        <p class="card-subtitle">Agenda da sua empresa</p>
+                    </div>
+                    <a class="text-link" href="/eventos">Ver eventos</a>
+                </div>
+
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th>Evento</th>
+                                <th>Data</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="proximos-eventos">
+                            <tr>
+                                <td colspan="3">
+                                    <div class="empty-state">
+                                        <strong>Carregando eventos</strong>
+                                        Os dados aparecerão aqui quando a API estiver conectada.
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </article>
+
+            <article class="card">
+                <div class="section-heading">
+                    <div>
+                        <h2>Resumo financeiro</h2>
+                        <p class="card-subtitle">Visão geral dos valores</p>
+                    </div>
+                </div>
+
+                <div style="display:grid;gap:18px">
+                    <div>
+                        <p class="card-subtitle">Valor a receber</p>
+                        <h2 id="valor-a-receber">R$ 0,00</h2>
+                    </div>
+                    <div>
+                        <p class="card-subtitle">Saldo de receitas recebidas menos despesas</p>
+                        <h2 id="saldo-financeiro">R$ 0,00</h2>
+                    </div>
+                    <a href="/financeiro" class="btn btn-secondary">
+                        Abrir financeiro
+                    </a>
+                </div>
+            </article>
+        </section>
+    </div>
+
+    <script src="/js/components.js" defer></script>
+    <script src="/js/api.js" defer></script>
+    <script src="/js/layout.js" defer></script>
+    <script src="/js/pages/painel.js" defer></script>
+</body>
+</html>
